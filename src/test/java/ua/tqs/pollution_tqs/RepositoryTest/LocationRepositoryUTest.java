@@ -31,7 +31,6 @@ class LocationRepositoryUTest {
     @Test
     void validCity(){
         assertThat(locationRepository.getLocationRepoC(AVEIRO)).isInstanceOf(Location.class);
-
     }
 
     @Test

@@ -16,6 +16,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.JavascriptExecutor;
 import java.util.*;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 @ExtendWith(SeleniumJupiter.class)
 class SearchesTest {
   private WebDriver driver;
@@ -34,6 +36,7 @@ class SearchesTest {
   }
   @Test
   void searches() {
+    String title;
     driver.get("http://localhost:3000/");
     driver.manage().window().setSize(new Dimension(831, 699));
     driver.findElement(By.id("cityName")).click();
@@ -45,6 +48,8 @@ class SearchesTest {
       Actions builder = new Actions(driver);
       builder.moveToElement(element).perform();
     }
+    title = driver.findElement(By.id("result-description")).getText();
+    title.contains("Béja, TN");
     driver.findElement(By.id("countryName")).sendKeys("pt");
     driver.findElement(By.cssSelector(".MuiButton-label")).click();
     {
@@ -52,10 +57,12 @@ class SearchesTest {
       Actions builder = new Actions(driver);
       builder.moveToElement(element, 0, 0).perform();
     }
+    title = driver.findElement(By.id("result-description")).getText();
+    title.contains("Beja, PT");
     driver.findElement(By.id("cityName")).click();
     driver.findElement(By.id("cityName")).sendKeys("aaaaa");
     driver.findElement(By.cssSelector(".MuiButton-label")).click();
-    String title = driver.findElement(By.id("result-error")).getText();
-    System.out.println(title);
+    title = driver.findElement(By.id("result-error")).getText();
+    assertThat(title).isEqualTo("Something went wrong");
   }
 }
